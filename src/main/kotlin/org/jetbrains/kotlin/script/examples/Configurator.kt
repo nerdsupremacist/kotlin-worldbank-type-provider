@@ -9,18 +9,17 @@ object Configurator : RefineScriptCompilationConfigurationHandler {
     override fun invoke(context: ScriptConfigurationRefinementContext): ResultWithDiagnostics<ScriptCompilationConfiguration> {
         val baseDirectory = (context.script as? FileBasedScriptSource)?.file?.parentFile
 
-        val annotations = context
+        context
             .collectedData
             ?.get(ScriptCollectedData.foundAnnotations)
             ?.mapNotNull { annotation ->
                 when (annotation) {
-                    is Provider -> annotation
+                    is WorldBank -> annotation
                     else -> null
                 }
             }
             ?.takeIf { it.isNotEmpty() } ?: return context.compilationConfiguration.asSuccess()
 
-        // TODO: use `annotations` to generate your code
         val generatedCode = emptyList<String>()
 
         val generatedScripts = generatedCode

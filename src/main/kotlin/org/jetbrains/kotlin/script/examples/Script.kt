@@ -2,7 +2,7 @@ package org.jetbrains.kotlin.script.examples
 
 import kotlin.script.experimental.annotations.KotlinScript
 
-const val extension = "sample"
+const val extension = "worldbank"
 
 @Suppress("unused")
 @KotlinScript(
