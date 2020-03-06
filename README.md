@@ -12,13 +12,15 @@ For instance if you want to compare the Percentage of GDP that is Trade In Servi
 val germany = WorldBankData.countries().germany()
 val europeanUnion = WorldBankDAta.regions().europeanUnion()
 
-// Data is laid out by year
-val tradeInServicesForGermany = germany.indicators().tradeInServicesPercentageOfGdp() // List<Pair<Int, Double>>
-val tradeInServicesForEuropeanUnion = europeanUnion.indicators().tradeInServicesPercentageOfGdp() // List<Pair<Int, Double>>
+runBlocking {
+  // Data is a list of Pairs from year to value
+  val tradeInServicesForGermany = germany.indicators().tradeInServicesPercentageOfGdp() // List<Pair<Int, Double>>
+  val tradeInServicesForEuropeanUnion = europeanUnion.indicators().tradeInServicesPercentageOfGdp() // List<Pair<Int, Double>>
 
-// use some plotting library
-plot(tradeInServicesForGermany)
-plot(tradeInServicesForEuropeanUnion)
+  // use some plotting library
+  plot(tradeInServicesForGermany)
+  plot(tradeInServicesForEuropeanUnion)
+}
 ```
 
 ## Usage
