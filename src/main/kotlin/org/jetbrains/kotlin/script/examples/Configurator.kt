@@ -1,7 +1,6 @@
 package org.jetbrains.kotlin.script.examples
 
 import kotlinx.coroutines.runBlocking
-import org.jetbrains.kotlin.script.examples.sourceCode.transform
 import kotlin.script.experimental.api.*
 import kotlin.script.experimental.host.FileBasedScriptSource
 import kotlin.script.experimental.host.toScriptSource

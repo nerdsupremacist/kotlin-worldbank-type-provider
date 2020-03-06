@@ -6,7 +6,6 @@ data class Indicators internal constructor(
 ) {
     fun indicator(
         id: String,
-        name: String,
-        description: String
-    ) = Indicator(id, name, description, countryOrRegionCode, client)
+        name: String
+    ) = Indicator(id, name, countryOrRegionCode, client)
 }

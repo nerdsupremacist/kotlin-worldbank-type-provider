@@ -5,14 +5,14 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.coroutineScope
 import org.jetbrains.kotlin.script.examples.api.WorldBankClient
 
-internal fun List<SourceCodeTransformable>.asSourceCodeTransformable(
-): SourceCodeTransformable = CompoundSourceCodeTransformable(this)
+internal fun <T> List<SourceCodeTransformable<T>>.asSourceCodeTransformable(
+): SourceCodeTransformable<T> = CompoundSourceCodeTransformable(this)
 
-private class CompoundSourceCodeTransformable(
-    private val children: List<SourceCodeTransformable>
-) : SourceCodeTransformable {
+private class CompoundSourceCodeTransformable<Context>(
+    private val children: List<SourceCodeTransformable<Context>>
+) : SourceCodeTransformable<Context> {
 
-    override suspend fun WorldBankClient.transform(): String {
+    override suspend fun Context.transform(): String {
         val code = coroutineScope {
             children.map { child ->
                 async {

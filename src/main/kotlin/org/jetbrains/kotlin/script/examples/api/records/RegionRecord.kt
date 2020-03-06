@@ -3,6 +3,7 @@ package org.jetbrains.kotlin.script.examples.api.records
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties
 import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
+import org.jetbrains.kotlin.script.examples.WithClient
 import org.jetbrains.kotlin.script.examples.api.WorldBankClient
 import org.jetbrains.kotlin.script.examples.api.documents
 import org.jetbrains.kotlin.script.examples.sourceCode.SourceCodeTransformable
@@ -11,14 +12,14 @@ import org.jetbrains.kotlin.script.examples.utils.toCamelCase
 import org.jetbrains.kotlin.script.examples.utils.toUpperCamelCase
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-internal data class RegionRecord(val code: String, val name: String): SourceCodeTransformable {
+internal data class RegionRecord(val code: String, val name: String): SourceCodeTransformable<WithClient<*>> {
 
-    override suspend fun WorldBankClient.transform(): String = coroutineScope {
+    override suspend fun WithClient<*>.transform(): String = coroutineScope {
         val codeForCountries = async {
-            countriesForRegion(this@RegionRecord)
-                .map { CountryInRegion(it, this@RegionRecord) }
+            client.countriesForRegion(this@RegionRecord)
+                .map { CountryInRegion(it) }
                 .asSourceCodeTransformable()
-                .run { transform() }
+                .run { this@RegionRecord.transform() }
         }
 
         val regionTypeName = name.toUpperCamelCase()
@@ -43,10 +44,6 @@ internal data class RegionRecord(val code: String, val name: String): SourceCode
 
 internal suspend fun WorldBankClient.regions(): List<RegionRecord> = documents("region")
 
-private data class CountryInRegion(val country: CountryRecord, val region: RegionRecord): SourceCodeTransformable {
-
-    override suspend fun WorldBankClient.transform(): String {
-        return with (country) { transformInside(region = this@CountryInRegion.region) }
-    }
-
+private data class CountryInRegion(val country: CountryRecord): SourceCodeTransformable<RegionRecord> {
+    override suspend fun RegionRecord.transform() = with (country) { transformInRegion() }
 }

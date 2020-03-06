@@ -12,34 +12,40 @@ import org.jetbrains.kotlin.script.examples.utils.toUpperCamelCase
 internal data class IndicatorRecord(
     val id: String,
     val name: String,
-    val sourceNote: String,
-    val source: SourceReference
-): SourceCodeTransformable {
+    val source: SourceReference,
+    val topics: List<TopicReference>
+): SourceCodeTransformable<Any> {
 
     @JsonIgnoreProperties(ignoreUnknown = true)
     data class SourceReference(val id: String, val value: String)
 
-    override suspend fun WorldBankClient.transform(): String {
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    data class TopicReference(val id: String?)
+
+    val topicIds: Set<String>
+        get() = topics.mapNotNull { it.id }.toSet()
+
+    override suspend fun Any.transform(): String {
         val propertyName = name.toCamelCase()
 
         return """
             fun Indicators.$propertyName(): Indicator = indicator(
                 id = "$id",
-                name = "$name",
-                description = "$sourceNote"
+                name = "$name"
             )
         """.trimIndent()
     }
 
-    suspend fun WorldBankClient.transformInside(topic: TopicRecord): String {
-        val topicTypeName = topic.value.toUpperCamelCase()
+    fun TopicRecord.transformInTopic(): String {
+        val topicTypeName = value.toUpperCamelCase()
         val propertyName = name.toCamelCase()
 
         return """
-            func TopicIndicators<$topicTypeName>.$propertyName() = indicator(
+            @JvmName("get$topicTypeName$propertyName")
+            fun TopicIndicators<$topicTypeName>.$propertyName() = indicatorDescription(
                 id = "$id",
-                name = "$name",
-                description = "$sourceNote"
+                name = "$name"
             )
         """.trimIndent()
     }

@@ -14,13 +14,13 @@ internal data class CountryRecord(
     val name: String,
     val capitalCity: String,
     val region: RegionReference
-): SourceCodeTransformable {
+): SourceCodeTransformable<Any> {
     @JsonIgnoreProperties(ignoreUnknown = true)
     data class RegionReference(val id: String, val value: String)
 
     val isRegion = region.id == "NA"
 
-    override suspend fun WorldBankClient.transform(): String {
+    override suspend fun Any.transform(): String {
         val propertyName = name.toCamelCase()
         val regionTypeName = region.value.toUpperCamelCase()
 
@@ -35,18 +35,18 @@ internal data class CountryRecord(
         """.trimIndent()
     }
 
-    fun WorldBankClient.transformInside(region: RegionRecord): String {
-        val propertyName = name.toCamelCase()
-        val regionTypeName = region.name.toUpperCamelCase()
+    fun RegionRecord.transformInRegion(): String {
+        val propertyName = this@CountryRecord.name.toCamelCase()
+        val regionTypeName = name.toUpperCamelCase()
 
         return """
             @JvmName("get$regionTypeName$propertyName")
             fun RegionCountries<$regionTypeName>.${propertyName}(): Country<$regionTypeName> = country(
                 id = "$id", 
-                name = "$name",
+                name = "${this@CountryRecord.name}",
                 capitalCity = "$capitalCity",
-                regionId = "${region.code}",
-                regionName = "${region.name}"
+                regionId = "$code",
+                regionName = "$name"
             )
         """.trimIndent()
     }
