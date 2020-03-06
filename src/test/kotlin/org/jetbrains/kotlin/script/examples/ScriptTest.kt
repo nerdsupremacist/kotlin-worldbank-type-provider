@@ -5,17 +5,17 @@ import org.junit.Test
 import java.io.ByteArrayOutputStream
 import java.io.File
 import java.io.PrintStream
-import kotlin.reflect.full.memberProperties
 import kotlin.script.experimental.api.*
 import kotlin.script.experimental.host.toScriptSource
 import kotlin.script.experimental.jvm.baseClassLoader
-import kotlin.script.experimental.jvm.impl.getResourcePathForClass
 import kotlin.script.experimental.jvm.jvm
 import kotlin.script.experimental.jvmhost.BasicJvmScriptingHost
 import kotlin.script.experimental.jvmhost.createJvmCompilationConfigurationFromTemplate
+import kotlin.time.ExperimentalTime
 
 class ScriptTest {
 
+    @ExperimentalTime
     @Test
     fun `Sample Test`() {
         val out = captureOut {
@@ -23,7 +23,8 @@ class ScriptTest {
             assertSucceeded(res)
         }.lines()
 
-        Assert.assertEquals("hello world", out[0])
+        Assert.assertEquals("Germany", out[0])
+        Assert.assertEquals("Spain", out[1])
     }
 
 }

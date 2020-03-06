@@ -22,7 +22,7 @@ import kotlin.reflect.KClass
 
 //region Basic World Bank HTTP Client
 
-class WorldBankClient(private val url: String) {
+internal class WorldBankClient(val url: String) {
 
     //region Sub Types
 
@@ -108,7 +108,7 @@ class WorldBankClient(private val url: String) {
 
 //region Reified Fetch Functions
 
-suspend inline fun <reified T : Any> WorldBankClient.page(
+internal suspend inline fun <reified T : Any> WorldBankClient.page(
     vararg functions: String,
     arguments: Map<String, String> = emptyMap(),
     page: Int
@@ -116,7 +116,7 @@ suspend inline fun <reified T : Any> WorldBankClient.page(
     return page(*functions, arguments = arguments, page = page, type = T::class)
 }
 
-suspend inline fun <reified T : Any> WorldBankClient.documents(
+internal suspend inline fun <reified T : Any> WorldBankClient.documents(
     vararg functions: String,
     arguments: Map<String, String> = emptyMap()
 ): List<T> {
