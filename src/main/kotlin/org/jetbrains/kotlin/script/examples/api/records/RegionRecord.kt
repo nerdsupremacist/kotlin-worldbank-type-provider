@@ -26,11 +26,10 @@ internal data class RegionRecord(val code: String, val name: String): SourceCode
 
         val enumType = "enum class $regionTypeName { ; }"
         val regionsProperty = """
-            val Regions.${regionPropertyName}: Region<$regionTypeName>
-                get() = region(
-                    id = "$code",
-                    name = "$name"
-                )
+            fun Regions.${regionPropertyName}(): Region<$regionTypeName> = region(
+                id = "$code",
+                name = "$name"
+            )
         """.trimIndent()
 
         buildString {

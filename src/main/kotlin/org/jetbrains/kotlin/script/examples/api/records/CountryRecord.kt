@@ -25,24 +25,23 @@ internal data class CountryRecord(
         val regionTypeName = region.value.toUpperCamelCase()
 
         return """
-            val Countries.${propertyName}: Country<$regionTypeName> 
-                get() = country(
-                    id = "$id", 
-                    name = "$name", 
-                    capitalCity = "$capitalCity",
-                    regionId = "${region.id}",
-                    regionName = "${region.value}"
-                )
+            fun Countries.${propertyName}(): Country<$regionTypeName> = country(
+                id = "$id", 
+                name = "$name",
+                capitalCity = "$capitalCity",
+                regionId = "${region.id}",
+                regionName = "${region.value}"
+            )
         """.trimIndent()
     }
 
     fun WorldBankClient.transformInside(region: RegionRecord): String {
-        val propertyName = name.toUpperCamelCase()
+        val propertyName = name.toCamelCase()
         val regionTypeName = region.name.toUpperCamelCase()
 
         return """
             @JvmName("get$regionTypeName$propertyName")
-            fun RegionCountries<$regionTypeName>.get${propertyName}(): Country<$regionTypeName> = country(
+            fun RegionCountries<$regionTypeName>.${propertyName}(): Country<$regionTypeName> = country(
                 id = "$id", 
                 name = "$name",
                 capitalCity = "$capitalCity",

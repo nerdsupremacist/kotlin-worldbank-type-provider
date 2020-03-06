@@ -23,12 +23,11 @@ internal data class IndicatorRecord(
         val propertyName = name.toCamelCase()
 
         return """
-            val Indicators.$propertyName: Indicator 
-                get() = indicator(
-                    id = "$id",
-                    name = "$name",
-                    description = "$sourceNote"
-                )
+            fun Indicators.$propertyName(): Indicator = indicator(
+                id = "$id",
+                name = "$name",
+                description = "$sourceNote"
+            )
         """.trimIndent()
     }
 
@@ -37,12 +36,11 @@ internal data class IndicatorRecord(
         val propertyName = name.toCamelCase()
 
         return """
-            val TopicIndicators<$topicTypeName>.$propertyName: IndicatorDescription 
-                get() = indicator(
-                    id = "$id",
-                    name = "$name",
-                    description = "$sourceNote"
-                )
+            func TopicIndicators<$topicTypeName>.$propertyName() = indicator(
+                id = "$id",
+                name = "$name",
+                description = "$sourceNote"
+            )
         """.trimIndent()
     }
 }
