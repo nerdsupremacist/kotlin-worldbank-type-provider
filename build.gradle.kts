@@ -17,7 +17,8 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-scripting-jvm-host:$kotlinVersion")
     implementation("org.jetbrains.kotlin:kotlin-scripting-dependencies:$kotlinVersion")
     implementation("org.jetbrains.kotlin:kotlin-script-util:$kotlinVersion")
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-runtime:0.14.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-jdk8:1.3.3")
     implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.10.+")
 }
 
