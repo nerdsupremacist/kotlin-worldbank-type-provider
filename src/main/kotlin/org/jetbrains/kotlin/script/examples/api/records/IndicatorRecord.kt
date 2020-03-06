@@ -19,15 +19,16 @@ internal data class IndicatorRecord(
     @JsonIgnoreProperties(ignoreUnknown = true)
     data class SourceReference(val id: String, val value: String)
 
-
     @JsonIgnoreProperties(ignoreUnknown = true)
     data class TopicReference(val id: String?)
 
     val topicIds: Set<String>
         get() = topics.mapNotNull { it.id }.toSet()
 
+    val cleanName: String = name.replace("%", "Percentage")
+
     override suspend fun Any.transform(): String {
-        val propertyName = name.toCamelCase()
+        val propertyName = cleanName.toCamelCase()
 
         return """
             fun Indicators.$propertyName(): Indicator = indicator(
@@ -39,7 +40,7 @@ internal data class IndicatorRecord(
 
     fun TopicRecord.transformInTopic(): String {
         val topicTypeName = value.toUpperCamelCase()
-        val propertyName = name.toCamelCase()
+        val propertyName = cleanName.toCamelCase()
 
         return """
             @JvmName("get$topicTypeName$propertyName")
