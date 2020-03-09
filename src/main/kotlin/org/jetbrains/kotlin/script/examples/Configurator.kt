@@ -30,7 +30,7 @@ object Configurator : RefineScriptCompilationConfigurationHandler {
 
         if (banks.count() != 1) {
             val bankDescriptions = banks.joinToString("\n\n")
-            val errorMessage = "Importing different versions of the World Bank into the same script of: \n $bankDescriptions"
+            val errorMessage = "Importing different versions of the World Bank into the same script is not allowed:\n $bankDescriptions"
             return makeFailureResult(errorMessage.asErrorDiagnostics())
         }
 
@@ -41,9 +41,13 @@ object Configurator : RefineScriptCompilationConfigurationHandler {
                 .apply { deleteOnExit() }
                 .toScriptSource()
 
-        return ScriptCompilationConfiguration(context.compilationConfiguration) {
-            importScripts.append(generatedScript)
-        }.asSuccess()
+        return context
+            .compilationConfiguration
+            .with {
+                importScripts.append(generatedScript)
+                providedProperties
+            }
+            .asSuccess()
     }
 
 }
